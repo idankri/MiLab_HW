@@ -2,6 +2,7 @@ package com.example.milab_hw2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +18,17 @@ public class MainActivity extends AppCompatActivity {
         Button lannisters_button = (Button)findViewById(R.id.lanisters_button);
 
         starks_button.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(v.getContext(), "Hello!!!!!", Toast.LENGTH_SHORT);
-                toast.show();
+                Intent intent = new Intent(v.getContext(), StarksGalleryActivity.class);
+                startActivity(intent);
+            }
+        });
+        lannisters_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LanistersGalleryActivity.class);
+                startActivity(intent);
             }
         });
     }
