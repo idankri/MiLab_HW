@@ -15,7 +15,7 @@ public abstract class GalleryActivity extends AppCompatActivity {
     }
 
     void init(String[] data, int[] images){
-        GalleryAdapter adapter = new GalleryAdapter(this.getBaseContext(), data, new int[2]);
+        GalleryAdapter adapter = new GalleryAdapter(this, data, images);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getBaseContext()));

@@ -11,8 +11,10 @@ public class LanistersGalleryActivity extends GalleryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lanisters_gallery);
 
-        String[] lannisters_data = {"Sersei", "And such"};
-        int[] images = {}; //To be implemented
+        String[] lannisters_data = getResources().getStringArray(R.array.lannisters);
+        int[] images = {R.drawable.tyrion, R.drawable.jaime, R.drawable.tommen,
+                        R.drawable.myrcella, R.drawable.kevan, R.drawable.tywin,
+                        R.drawable.lancel, R.drawable.cersei, R.drawable.joffrey};
         init(lannisters_data, images);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.milab_hw2;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,16 +22,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     @NonNull
     @Override
     public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //ImageView imgView = new ImageView(pare)
-        TextView textView = new TextView(context);
-        GalleryViewHolder holder = new GalleryViewHolder(textView);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.gallery_row, parent, false);
+        GalleryViewHolder holder = new GalleryViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
-        String textForDisplay = this.data[position];
-        holder.mTextView.setText(textForDisplay);
+        holder.characterName.setText(this.data[position]);
+        holder.characterImage.setImageResource(images[position]);
     }
 
     @Override
@@ -39,10 +40,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     }
 
     public static class GalleryViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
+        private TextView characterName;
+        private ImageView characterImage;
         public GalleryViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView)itemView;
+            characterName = itemView.findViewById(R.id.character_name);
+            characterImage = itemView.findViewById(R.id.character_image);
         }
     }
 }
