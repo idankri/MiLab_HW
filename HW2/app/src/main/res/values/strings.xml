@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Milab_HW2</string>
+
+    <string-array name="starks">
+        <item>Eddard</item>
+        <item>Arya</item>
+        <item>Catelyn</item>
+        <item>Benjen</item>
+        <item>Bran</item>
+        <item>Sansa</item>
+        <item>Jon Snow</item>
+        <item>Rikcon</item>
+        <item>Robb</item>
+    </string-array>
+    <string-array name="lannisters">
+        <item>Tyrion</item>
+        <item>Jaime</item>
+        <item>Tommen</item>
+        <item>Myrcella</item>
+        <item>Kevan</item>
+        <item>Tywin</item>
+        <item>Lancel</item>
+        <item>Cersei</item>
+        <item>Joffrey</item>
+    </string-array>
+</resources>
