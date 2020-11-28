@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import static com.example.hw3.App.CHANNEL_ID;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -14,18 +19,18 @@ import android.widget.Toast;
  * helper methods.
  */
 public class QuoteIntentService extends IntentService {
-
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_QUOTE = "com.example.hw3.action.quote";
 
     private static int arrLoc = 0;
     private static String[] quotes = {"Hi there", "Hello"};
-    // TODO: Rename parameters
+    private NotificationManagerCompat notificationManager;
+
     //private static final String EXTRA_PARAM1 = "com.example.hw3.extra.PARAM1";
     //private static final String EXTRA_PARAM2 = "com.example.hw3.extra.PARAM2";
 
     public QuoteIntentService() {
         super("QuoteIntentService");
+        notificationManager = null;
     }
 
     /**
@@ -35,7 +40,7 @@ public class QuoteIntentService extends IntentService {
      * @see IntentService
      */
     // TODO: Customize helper method
-    public static void startActionQuote(Context context, String param1, String param2) {
+    public static void startActionQuote(Context context) {
         Intent intent = new Intent(context, QuoteIntentService.class);
         intent.setAction(ACTION_QUOTE);
         //intent.putExtra(EXTRA_PARAM1, param1);
@@ -56,7 +61,15 @@ public class QuoteIntentService extends IntentService {
     }
 
     private void handleActionQuote(){
+        if(notificationManager == null){
+            notificationManager = NotificationManagerCompat.from(this);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Quote")
+                .setContentText(quotes[arrLoc]);
 
+        notificationManager.notify(1, builder.build());
         arrLoc = (arrLoc + 1) % quotes.length;
     }
     /**
