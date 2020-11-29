@@ -1,6 +1,9 @@
 package com.example.hw3;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
 import android.widget.Toast;
@@ -21,16 +24,13 @@ import static com.example.hw3.App.CHANNEL_ID;
 public class QuoteIntentService extends IntentService {
     private static final String ACTION_QUOTE = "com.example.hw3.action.quote";
 
-    private static int arrLoc = 0;
-    private static String[] quotes = {"Hi there", "Hello"};
-    private NotificationManagerCompat notificationManager;
-
-    //private static final String EXTRA_PARAM1 = "com.example.hw3.extra.PARAM1";
-    //private static final String EXTRA_PARAM2 = "com.example.hw3.extra.PARAM2";
-
     public QuoteIntentService() {
         super("QuoteIntentService");
-        notificationManager = null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
     }
 
     /**
@@ -43,8 +43,6 @@ public class QuoteIntentService extends IntentService {
     public static void startActionQuote(Context context) {
         Intent intent = new Intent(context, QuoteIntentService.class);
         intent.setAction(ACTION_QUOTE);
-        //intent.putExtra(EXTRA_PARAM1, param1);
-        //intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
 
@@ -53,33 +51,25 @@ public class QuoteIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_QUOTE.equals(action)) {
-                //final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
                 handleActionQuote();
             }
         }
     }
 
     private void handleActionQuote(){
-        if(notificationManager == null){
-            notificationManager = NotificationManagerCompat.from(this);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Quote")
-                .setContentText(quotes[arrLoc]);
-
-        notificationManager.notify(1, builder.build());
-        arrLoc = (arrLoc + 1) % quotes.length;
+        startAlarm(this);
     }
+
     /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
+     * Start an alarm that spawns quote notifications
+     * @param context - context for the alarm
      */
-    /**
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
-    }*/
+    private void startAlarm(Context context){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                5*60*1000, alarmIntent);
+    }
 
 }
