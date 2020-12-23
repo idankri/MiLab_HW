@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">HW3</string>
+
+    <string-array name="tarantino_movie_quotes">
+        <item>“They call it a Royale with cheese.”</item>
+        <item>“You probably heard we ain’t in the prisoner-takin’ business;
+            we in the killin’ Nazi business. And cousin, business is a-boomin’.”</item>
+        <item>“Are you gonna bark all day little doggie? Or are you gonna bite?”</item>
+        <item>“You know somethin’, Utivich? I think this just might be my masterpiece!”</item>
+        <item>“That’s a pretty fucking good milkshake.
+            I don’t know if it’s worth five dollars but it’s pretty fucking good.”</item>
+        <item>“D-J-A-N-G-O… The D is silent.”</item>
+        <item>“Say ‘what’ again. Say ‘what’ again, I dare you, I double dare you mother*****,
+            say what one more Goddamn time!”</item>
+        <item>“Do you know what this is?
+            It’s the world’s smallest violin playing just for the waitresses.”</item>
+        <item>“Oh, you believe in Jesus now, huh, b**ch? Good, ’cause you ’bout to meet him!”</item>
+        <item> “AK-47. The very best there is. When you absolutely,
+            positively got to kill every motherfucker in the room, accept no substitutes.”</item>
+        <item>"My ass may be dumb, but I ain't no dumbass."</item>
+        <item>“You open your mouth, you gonna get a bullet. Move a little sudden, a little strange,
+            you gonna get a bullet. Not a warnin’, not a question. A bullet”</item>
+        <item>“You must have big rats if you need Hattori Hanzo’s steel.</item>
+        <item>"You shoot me in a dream, you better wake up and apologize."</item>
+        <item>"I didn't create the situation, I'm just dealing with it!"</item>
+        <item>"I like the way you die, boy."</item>
+        <item>"Revenge is never a straight line. It’s a forest,
+            and like a forest it’s easy to lose your way, to get lost, to forget where you came in."</item>
+    </string-array>
+</resources>
