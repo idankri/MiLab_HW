@@ -1,4 +1,5 @@
 const express = require('express');
+const FCM = require('fcm-push');
 
 const API_KEY =  'NV713Q1NZHCSFDU9'; //enter alpha vantage API KEY here
 const ALPHA_VANTAGE_URL = 'https://www.alphavantage.co/query';
@@ -34,3 +35,7 @@ app.get('/:symbol', (req, res) => {
 
     }, 1000);
 });
+
+app.post('/token/:token', (req, res) => {
+    // insert token into mongoDB
+})
