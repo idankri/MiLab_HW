@@ -29,8 +29,7 @@ const fetchStockData = (symbol, cb) => {
     let url = new URL(ALPHA_VANTAGE_URL);
     let params = {function: "GLOBAL_QUOTE", symbol: symbol, apikey: API_KEY};
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-    // fetch data
-    
+    // fetch data and execute callback
     fetch(url , {method: 'GET'})
     .then(response => response.json())
     .then((data) => {
@@ -68,13 +67,11 @@ app.post('/token/:token', (req, res) => {
 
 // subscribe a user to a symbol
 app.post('/symbol/:symbol', (req, res) => {
-    // I set the interval to 1 day as AlphaVantage API doesn't support mid-day prices
-    // for free users
-    console.log("got request");
-
     token = req.body.token;
     symbol = req.params.symbol;
     console.log("Got new symbol: " + symbol + " token: " + token);
+    // set a recurring method that fetches the stock data and sends a notification
+    // to the user
     setInterval(()=>{
         fetchStockData(symbol, (price, err) => {
             if(err){
@@ -84,11 +81,11 @@ app.post('/symbol/:symbol', (req, res) => {
                 send_notification(token, symbol, price);
             }
         })
-    }, 10000);
+    }, 30000);
     res.json({result: "success"});
 });
 
-// connect to server
+// start app
 app.listen(PORT, () => {
     console.log('App listening on port ' + PORT);
 });

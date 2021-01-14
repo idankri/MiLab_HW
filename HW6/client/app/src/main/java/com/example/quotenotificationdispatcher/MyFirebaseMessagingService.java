@@ -1,11 +1,19 @@
 package com.example.quotenotificationdispatcher;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -52,6 +60,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         RequestQueueSingleton.getInstance(this).getRequestQueue().add(req);
     }
 
+    /**
+     * Handles message receiving
+     * @param remoteMessage
+     */
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -61,10 +73,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(MyFirebaseMessagingService.this, remoteMessage.getNotification().getBody(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MyFirebaseMessagingService.this, remoteMessage.getNotification().getBody(), Toast.LENGTH_LONG).show();
+                    sendNotification(remoteMessage.getNotification().getBody());
                 }
             });
 
+        }
+    }
+
+    /**
+     * Sends a notification to the client
+     * @param messageBody
+     */
+    private void sendNotification(String messageBody) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        String channelId = getString(R.string.default_notification_channel_id);
+        //Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setContentTitle("Stock update!")
+                        .setContentText(messageBody)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 }

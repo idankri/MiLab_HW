@@ -27,10 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Button subscribeButton = (Button)findViewById(R.id.subscribe_button);
-        subscribeButton.setOnClickListener(new View.OnClickListener() {
 
+        subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText symbolText = (EditText)findViewById(R.id.editTextStockSymbol);
@@ -40,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sends a symbol and token information to the server
+     * @param symbol- such as GOOG, IBM, etc
+     * @param token - user Firebase Token
+     */
     private void sendSymbol(String symbol, String token){
         JSONObject reqObject = new JSONObject();
         try {
@@ -56,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
         RequestQueueSingleton.getInstance(this).getRequestQueue().add(req);
     }
 
+    /**
+     * Sends the server an appropriate symbol
+     * @param symbol - String such as GOOG, IBM, etc (valid symbol is assumed)
+     */
     private void updateSymbolInServer(String symbol){
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
             @Override
