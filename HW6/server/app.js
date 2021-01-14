@@ -1,41 +1,94 @@
+"use strict";
+
+// imports
 const express = require('express');
 const FCM = require('fcm-push');
+const bodyParser = require('body-parser');
+const fetch = require("node-fetch");
 
+//globals
+const PORT = 8080;
 const API_KEY =  'NV713Q1NZHCSFDU9'; //enter alpha vantage API KEY here
 const ALPHA_VANTAGE_URL = 'https://www.alphavantage.co/query';
+const collection = "tokens";
+const FCM_SERVER_KEY = "AAAArjuCf8U:APA91bH5PpDYttNRP6x2hY2xx0r2jlhlyIaPVREY-jpQuxFKEIGJvMm4WuNovjbBzJEOwbdli-nv6mNUDxFhTyjHVd-jrHFwaF5OrWQyOgmWZ1bvFF_Wet628SIejhy7zY7w4sxI5-Ts";
+let token = "";
+let symbol = "";
 
-let SYMBOL;
-let params = {function: "GLOBAL_QUOTE", symbol: SYMBOL, apikey: API_KEY};
+// init app
 let app = express();
+app.use(bodyParser.json());
 
-function fetchStockData(){
+// init fcm
+let fcm = new FCM(FCM_SERVER_KEY);
+
+// function that receives a symbol and a callback, 
+// fetches the stock data related to that symbol and calls the callbak on finish
+const fetchStockData = (symbol, cb) => {
     //parse URL
     let url = new URL(ALPHA_VANTAGE_URL);
+    let params = {function: "GLOBAL_QUOTE", symbol: symbol, apikey: API_KEY};
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     // fetch data
-    let rec_data;
+    
     fetch(url , {method: 'GET'})
     .then(response => response.json())
-    .then(data => rec_data = data)
+    .then((data) => {
+        cb(data["Global Quote"]["05. price"]);
+    })
     .catch((error) => {
         console.error('ERROR: ', error);
-        throw 'Failed to retreive data from REST';
+        cb("", error);
     });
-    // return last known price
-    return rec_data["Global Quote"]["05. price"];
-
 }
 
-app.get('/:symbol', (req, res) => {
-    // I set the interval to 1 day as AlphaVantage API doesn't support mid-day prices
-    // for free users
-    SYMBOL = req.params.symbol;
-    params.symbol = SYMBOL;
-    setInterval(()=>{
+// sends a notification through firebase
+const send_notification = (token, symbol, price) => {
+    fcm.send({
+        to: token,
+        data: {},
+        notification: {
+            title: "Your " + symbol + " update!",
+            body: "Current price: " + price
+        }
+    }, (error, response) => {
+        if(error){
+            console.log(error);
+        }
+    });
+    
+}
 
-    }, 1000);
+// update token
+app.post('/token/:token', (req, res) => {
+    token = req.params.token;
+    console.log("Got new token: " + token);
+    res.json({result: "success"});
 });
 
-app.post('/token/:token', (req, res) => {
-    // insert token into mongoDB
-})
+// subscribe a user to a symbol
+app.post('/symbol/:symbol', (req, res) => {
+    // I set the interval to 1 day as AlphaVantage API doesn't support mid-day prices
+    // for free users
+    console.log("got request");
+
+    token = req.body.token;
+    symbol = req.params.symbol;
+    console.log("Got new symbol: " + symbol + " token: " + token);
+    setInterval(()=>{
+        fetchStockData(symbol, (price, err) => {
+            if(err){
+                console.log(err);
+            }
+            else{
+                send_notification(token, symbol, price);
+            }
+        })
+    }, 10000);
+    res.json({result: "success"});
+});
+
+// connect to server
+app.listen(PORT, () => {
+    console.log('App listening on port ' + PORT);
+});

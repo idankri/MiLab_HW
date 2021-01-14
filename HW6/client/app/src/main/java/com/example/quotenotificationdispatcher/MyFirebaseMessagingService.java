@@ -1,6 +1,9 @@
 package com.example.quotenotificationdispatcher;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private static final String SERVER_ADDRESS = "http://10.0.2.2:8080/newtoken/";
     private static final String TAG = "MyFirebaseIIDService";
 
     @Override
@@ -31,12 +33,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void sendRegistrationToServer(String token){
         JSONObject reqObject = new JSONObject();
-        try{
-            reqObject.put("token", token);
-        }
-        catch(JSONException e){return;}
-
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, SERVER_ADDRESS,
+        String server_address = getResources().getString(R.string.server_address);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, server_address +
+                "token/" + token,
                 reqObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -59,7 +58,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
 
-            // should generate appropriate notification now
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MyFirebaseMessagingService.this, remoteMessage.getNotification().getBody(), Toast.LENGTH_LONG).show();
+                }
+            });
 
         }
     }
