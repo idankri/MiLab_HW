@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "748322717637",
+    "project_id": "quote-notification-dispatcher",
+    "storage_bucket": "quote-notification-dispatcher.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748322717637:android:75ea810f0540be520c55ac",
+        "android_client_info": {
+          "package_name": "com.example.quotenotificationdispatcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748322717637-ut8au9oipn8p8ohrrbrpqndintptss0g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIkx9c-Imcn0Hvjd4DH8r1L8gyJgJlYwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "748322717637-ut8au9oipn8p8ohrrbrpqndintptss0g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

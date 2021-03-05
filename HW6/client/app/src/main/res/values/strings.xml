@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Quote Notification Dispatcher</string>
+    <string name="server_address">http://192.168.1.125:8080/</string>
+    <string name="default_notification_channel_id">0</string>
+</resources>
